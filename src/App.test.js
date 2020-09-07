@@ -1,17 +1,22 @@
 import React from 'react';
-import { render, cleanup, fireEvent } from '@testing-library/react';
+import { render, screen, cleanup, fireEvent } from '@testing-library/react';
 import App from './App';
+import {store} from "./Redux/store"
+import {Provider} from "react-redux"
 
-afterEach(cleanup)
+beforeEach(() => {
+  render(<Provider store={store}><App /></Provider>);
+})
+
+afterEach(()=>cleanup())
 
 test('renders Count', () => {
-  const { getByText } = render(<App />);
-  const linkElement = getByText(/Count/i);
+  const linkElement = screen.getByText(/Count/i);
   expect(linkElement).toBeInTheDocument();
 });
 
 it("should have add and reduce button, and default value of Count is 0",()=>{
-  const { getAllByTestId, getByTestId } = render(<App />);
+  const { getAllByTestId, getByTestId } = screen
   const [add,reduce] = getAllByTestId('button')
   const counter = getByTestId('counter')
   expect(counter).toHaveTextContent('0')
@@ -21,7 +26,7 @@ it("should have add and reduce button, and default value of Count is 0",()=>{
 
 
 it("on click of add count should increment by 1",()=>{
-  const { getByTestId,getAllByTestId} = render(<App/>)
+  const { getByTestId,getAllByTestId} = screen
   const [add,reduce] = getAllByTestId('button')
   const counter = getByTestId('counter')
 
@@ -30,16 +35,16 @@ it("on click of add count should increment by 1",()=>{
 
 })
 it("on click reduce should decrement by 1",()=>{
-  const { getByTestId,getAllByTestId} = render(<App/>)
+  const { getByTestId,getAllByTestId} = screen
   const [add,reduce] = getAllByTestId('button')
   const counter = getByTestId('counter')
 
   fireEvent.click(reduce)
-  expect(counter).toHaveTextContent('-1')
+  expect(counter).toHaveTextContent('0')
 })
 
 it("on add and remove buttons should work",()=>{
-  const { getByTestId,getAllByTestId} = render(<App/>)
+  const { getByTestId,getAllByTestId} = screen
   const [add,reduce] = getAllByTestId('button')
   const counter = getByTestId('counter')
 

@@ -1,36 +1,22 @@
 import React from 'react';
 import Button from "./Component/Button"
 import './App.css';
+import {useSelector, useDispatch} from "react-redux"
+import {addCounter,reduceCounter} from "./Redux/action"
 
-class App extends React.Component {
-  constructor(props){
-    super(props);
-    this.state={
-      count: 0
-    }
-  }
-  handleAdd = () => {
-    this.setState({
-      count: this.state.count + 1
-    })
-  }
-  handleReduce = () => {
-    this.setState({
-      count: this.state.count - 1
-    })
-  }
-  render(){
-    const {count} = this.state
-    return (
-      <div className="App">
-          <h1>Count:</h1>
-          <h1 data-testid="counter">{count}</h1>
+function App(){
+  const count = useSelector(state=>state.count)
+  const dipsatch = useDispatch()
 
-          <Button label="ADD" onClick={this.handleAdd} />
-          <Button label="REDUCE" onClick={this.handleReduce} />
-      </div>
-    )
-  }
+  return (
+    <div className="App">
+        <h1>Count:</h1>
+        <h1 data-testid="counter">{count}</h1>
+
+        <Button label="ADD" onClick={()=>dipsatch(addCounter(1))} />
+        <Button label="REDUCE" onClick={()=>dipsatch(reduceCounter(1))} />
+    </div>
+  )
 }
 
 export default App;
